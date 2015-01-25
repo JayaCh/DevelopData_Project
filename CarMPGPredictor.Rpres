@@ -78,5 +78,4 @@ shinyServer(
     function(input, output) { 
         output$oPrediction <- renderPrint(predictMPG(input$cyl, input$horse, input$weight/1000, input$trans))
         }
-
 ```
