@@ -1,0 +1,82 @@
+Predict Car MPG
+========================================================
+author: Jaya
+date: `r date()`
+transition: rotate
+
+<small>
+Car MPG Predict App
+</small>
+
+Predict Car MPG with Shiny App
+========================================================
+transition: fade
+This Shiny app predicts the 'Miles per gallon' of a car based 
+on the car features selected by the user.
+
+The Car features presented to the user in the app WebView Sde Panel
+
+- Cylinder (Range: 3 - 8), 
+- Horse Power (Range: 50 - 230),
+- Weight in lbs (Range: 1650 - 5000),
+- Transmission Type (Automatic/Manual).
+
+
+Predict Model Algorithm
+=========================
+transition: fade
+
+Dataset **mtcars** is used for this prediction algorithm.
+
+- The car predictor features are slected based on the Regression Models Project.
+- Linear Regression model is built by **lm** function.
+- Predict MPG outcome by **predict** function
+
+
+App Components
+====================
+transition: fade
+The components of this app are 
+
+## ui.R
+- Reads the car features submitted by the User.
+- Displays the predictions and user selected features.
+
+## server.R
+- Hosts the prediction model algorithm
+- Caluclates the MPG outcome based on user selected features.
+
+R Code - 1/2
+========================================================
+transition: fade
+## Sample code from ui.R 
+
+```{r, echo=TRUE, eval=FALSE}
+sidebarPanel (
+            numericInput('cyl', 'Cylinders', 4, min = 3, max= 8, step = 1),
+            numericInput('horse', 'Horsepower', 100, min = 50, max= 230, step = 5),
+            numericInput('weight', 'Weight', 3000, min = 1650, max= 5000, step = 50),
+            selectInput("trans", "Transmission type", c ("Automatic", "Manual") ),
+            submitButton('Submit')
+        )
+```
+
+R Code - 2/2
+========================================================
+transition: fade
+## Sample code from server.R
+
+```{r, echo=TRUE, eval=FALSE}
+bestFit <- lm(mpg ~ cyl + hp + wt + am, data = mtcars)
+predictMPG <- function (cyl, horse, weight, trans)
+    {
+    newdata <- data.frame(cyl=cyl, hp=horse, wt=weight, am=trans)
+    predict(bestFit, newdata)
+    }
+
+shinyServer(
+    function(input, output) { 
+        output$oPrediction <- renderPrint(predictMPG(input$cyl, input$horse, input$weight/1000, input$trans))
+        }
+
+```
